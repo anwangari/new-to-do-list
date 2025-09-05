@@ -1,3 +1,3 @@
 import "./styles.css";
 
-console.log("Javascript Working Correctly.")
+console.log("Javascript Working Correctly.");
