@@ -1,4 +1,4 @@
-import { createElement, clearElement, appendChildren } from '../../utils/dom-helpers.js';
+import { createElement, clearElement, appendChildren } from '../utils/dom-helper.js';
 
 export function renderDashboard() {
     const dashContainer = createElement('div', {className: 'dash-container'})
