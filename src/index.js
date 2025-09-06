@@ -1,6 +1,6 @@
 import './styles.css'
 import ToDoListApp from './app/todo-app.js';
-import { renderDashboard } from './pages/main.js';
+import { renderDashboard } from './pages/dashboard.js';
 
 // Initial Data
 const app = new ToDoListApp();

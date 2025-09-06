@@ -9,7 +9,7 @@ module.exports = {
     filename: "main.js",
     path: path.resolve(__dirname, "dist"),
     clean: true,
-    publicPath: "/"
+    publicPath: "/new-to-do-list/"
   },
   devtool: "eval-source-map",
   devServer: {
