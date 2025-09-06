@@ -1,6 +1,7 @@
 import { createElement, appendChildren, clearElement } from '../utils/dom-helper.js';
+import { parse, format, parseISO} from 'date-fns';
 
-let selectedProjectName = 'Project A'; // Default selected project
+let selectedProjectName = 'Default'; // Default selected project
 
 function showTodoModal(app, mode = 'create', todo = null) {
   const modal = createElement('div', { className: 'modal' });
@@ -8,8 +9,7 @@ function showTodoModal(app, mode = 'create', todo = null) {
 
   const titleInput = createElement('input', { type: 'text', placeholder: 'Title', value: todo ? todo.title : '', required: true });
   const descInput = createElement('textarea', { placeholder: 'Description', textContent: todo ? todo.description : '' });
-  const dueDateInput = createElement('input', { type: 'text', placeholder: 'Due Date (MM/DD/YYYY)', value: todo ? todo.dueDate : '', required: true });
-  
+  const dueDateInput = createElement('input', { type: 'date', value: todo ? parseISO(format(todo.dueDate, 'yyyy-MM-dd')) : '', required: true });
   const prioritySelect = createElement('select');
   ['low', 'medium', 'high'].forEach(p => {
     const option = createElement('option', { value: p, textContent: p.charAt(0).toUpperCase() + p.slice(1) });
@@ -47,13 +47,15 @@ function showTodoModal(app, mode = 'create', todo = null) {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const newProjectName = projectSelect.value;
+    const dueDateValue = parse(dueDateInput.value, 'yyyy-MM-dd', new Date());
+    if (isNaN(dueDateValue)) throw new Error('Invalid due date');
     if (mode === 'create') {
-      app.addToDoToProject(titleInput.value, descInput.value, dueDateInput.value, prioritySelect.value, newProjectName, statusSelect.value);
+      app.addToDoToProject(titleInput.value, descInput.value, dueDateValue, prioritySelect.value, newProjectName, statusSelect.value);
     } else {
       const oldProjectName = todo.projectName;
       todo.updateTitle(titleInput.value);
       todo.updateDescription(descInput.value);
-      todo.updateDueDate(dueDateInput.value);
+      todo.updateDueDate(dueDateValue);
       todo.updatePriority(prioritySelect.value);
       todo.updateStatus(statusSelect.value);
       if (newProjectName !== oldProjectName) {
@@ -95,9 +97,10 @@ export function renderDashboard(app) {
 
     deleteIcon.addEventListener('click', () => {
       if (confirm(`Delete project ${project.name}?`)) {
-        app.deleteProject(project.name);
-        if (selectedProjectName === project.name) selectedProjectName = 'Default';
-        renderDashboard(app);
+        if (app.deleteProject(project.name)) { // Check if deletion was successful
+          if (selectedProjectName === project.name) selectedProjectName = 'Default';
+          renderDashboard(app);
+        }
       }
     });
 
@@ -131,9 +134,9 @@ export function renderDashboard(app) {
         const taskItem = createElement('li', { className: `task-item ${todo.priority.toLowerCase()}` });
         const taskContent = createElement('div', { className: 'task-content' });
         const taskTitle = createElement('div', { textContent: todo.title, className: 'task-title' });
-        const taskDue = createElement('div', { textContent: `Due: ${todo.dueDate}`, className: 'task-due' });
+        const taskDue = createElement('div', { textContent: `Due: ${format(todo.dueDate, 'MM/dd/yyyy')}`, className: 'task-due' });
         const taskDesc = createElement('div', { textContent: todo.description, className: 'task-desc' });
-        const taskStatus = createElement('div', { textContent: todo.status === 'Completed' ? `Completed: ${todo.dueDate}` : '', className: 'task-status' });
+        const taskStatus = createElement('div', { textContent: todo.status === 'Completed' ? `Completed: ${format(todo.dueDate, 'MM/dd/yyyy')}` : '', className: 'task-status' });
         appendChildren(taskContent, [taskTitle, taskDue, taskDesc, taskStatus]);
 
         const deleteIcon = createElement('span', { textContent: '🗑️', className: 'delete-icon' });
