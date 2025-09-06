@@ -6,5 +6,108 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: blueviolet;
+    background-color: whitesmoke;
+    color: #333;
 }
+  
+  header {
+    background: #fff;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  nav button {
+    background: none;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-weight: 500;
+    color: #666;
+  }
+  
+  nav button#new-project {
+    background-color: #6b46c1;
+    color: white;
+    border-radius: 4px;
+  }
+  
+  .dashboard-container {
+    display: flex;
+    padding: 20px;
+  }
+  
+  .sidebar {
+    width: 250px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
+  }
+  
+  .projects-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .project-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .project-link {
+    color: #6b46c1;
+    text-decoration: none;
+  }
+  
+  .task-count {
+    color: #666;
+  }
+  
+  .main-content {
+    flex-grow: 1;
+  }
+  
+  .tasks-container {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .task-category {
+    flex: 1;
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .to-do { border-left: 4px solid #ecc94b; }
+  .in-progress { border-left: 4px solid #63b3ed; }
+  .completed { border-left: 4px solid #48bb78; }
+  
+  h2, h3 {
+    color: #2d3748;
+  }
+  
+  .tasks-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .task-item {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+  }
+  
+  .task-item.low { background: #edf2f7; }
+  .task-item.medium { background: #e2e8f0; }
+  .task-item.high { background: #fed7d7; }
+  
+  .task-title { font-weight: 600; }
+  .task-due, .task-desc, .task-status { font-size: 0.9em; color: #666; }
