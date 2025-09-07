@@ -2,22 +2,88 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To Do List App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=5.0">
+    <meta name="description" content="TaskFlow - A modern, responsive todo list application for managing your projects and tasks efficiently.">
+    <meta name="theme-color" content="#6b46c1">
+    <title>TaskFlow - Todo List App</title>
     <link rel="icon" type="image/png" href="/new-to-do-list/43b01fbbf1a6e47fc319.png">
+    
+    <!-- Preconnect to external domains for better performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Load Inter font with font-display: swap for better performance -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- PWA meta tags for mobile -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="TaskFlow">
+    
+    <!-- Prevent zoom on input focus on iOS -->
+    <style>
+        @media screen and (-webkit-min-device-pixel-ratio: 0) {
+            select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"] {
+                font-size: 16px;
+            }
+        }
+    </style>
 <script defer src="/new-to-do-list/main.js"></script></head>
 <body>
     <header>
         <nav>
-            <button id="dash">Dashboard</button>
-            <button id="new-project">New Project</button>
+            <img src="/new-to-do-list/43b01fbbf1a6e47fc319.png" alt="TaskFlow to-do-list app logo" id="logo">
+            <button id="dash" aria-label="Go to Dashboard">Dashboard</button>
+            <button id="new-project" aria-label="Create New Project">New Project</button>
         </nav>
     </header>
-    <div id="content">
+    <div id="content" role="main">
         <!-- Page content comes here, from js DOM -->
+        <div style="display: flex; justify-content: center; align-items: center; height: 50vh; color: #666;">
+            <div style="text-align: center;">
+                <div style="font-size: 2em; margin-bottom: 10px;">📋</div>
+                <div>Loading TaskFlow...</div>
+            </div>
+        </div>
     </div>
+    
+    <!-- Error boundary for JavaScript errors -->
+    <script>
+        window.addEventListener('error', function(e) {
+            console.error('Application error:', e);
+            const content = document.getElementById('content');
+            if (content && !content.querySelector('.dashboard-container')) {
+                content.innerHTML = `
+                    <div style="padding: 20px; text-align: center; color: #666;">
+                        <h2 style="color: #e53e3e; margin-bottom: 10px;">⚠️ Application Error</h2>
+                        <p>Something went wrong loading the application.</p>
+                        <button onclick="location.reload()" style="margin-top: 15px; padding: 10px 20px; background: #6b46c1; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                            Reload Page
+                        </button>
+                    </div>
+                `;
+            }
+        });
+        
+        // Show loading state
+        document.addEventListener('DOMContentLoaded', function() {
+            const content = document.getElementById('content');
+            // Clear loading message after 5 seconds if nothing loaded
+            setTimeout(function() {
+                if (content && !content.querySelector('.dashboard-container')) {
+                    content.innerHTML = `
+                        <div style="padding: 20px; text-align: center; color: #666;">
+                            <h2 style="color: #dd6b20; margin-bottom: 10px;">⏳ Loading Taking Too Long</h2>
+                            <p>The application is taking longer than expected to load.</p>
+                            <button onclick="location.reload()" style="margin-top: 15px; padding: 10px 20px; background: #6b46c1; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                                Try Again
+                            </button>
+                        </div>
+                    `;
+                }
+            }, 5000);
+        });
+    </script>
 </body>
 </html>
