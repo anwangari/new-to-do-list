@@ -1,15 +1,16 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    background-color: whitesmoke;
-    color: #333;
+  font-family: 'Inter', sans-serif;
+  background-color: whitesmoke;
+  color: #333;
+  min-height: 100vh;
 }
-  
+
 header {
   background: #fff;
   padding: 10px 20px;
@@ -17,6 +18,14 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+nav {
+  display: flex;
+  gap: 10px;
 }
 
 nav button {
@@ -26,26 +35,44 @@ nav button {
   cursor: pointer;
   font-weight: 500;
   color: #666;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+nav button:hover {
+  background-color: #f7fafc;
 }
 
 nav button#new-project {
   background-color: #6b46c1;
   color: white;
-  border-radius: 4px;
+}
+
+nav button#new-project:hover {
+  background-color: #553c9a;
 }
 
 .dashboard-container {
   display: flex;
   padding: 20px;
+  gap: 20px;
+  min-height: calc(100vh - 80px);
 }
 
 .sidebar {
-  width: 250px;
+  width: 280px;
   background: #fff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-right: 20px;
+  height: fit-content;
+  position: sticky;
+  top: 100px;
+}
+
+.sidebar h2 {
+  margin-bottom: 15px;
+  color: #2d3748;
 }
 
 .projects-list {
@@ -57,65 +84,105 @@ nav button#new-project {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
+  padding: 12px 8px;
   border-bottom: 1px solid #eee;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  transition: background-color 0.2s;
+}
+
+.project-item:hover {
+  background-color: #f7fafc;
 }
 
 .project-link {
   color: #6b46c1;
   text-decoration: none;
   flex-grow: 1;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.project-link:hover {
+  color: #553c9a;
 }
 
 .task-count {
   color: #666;
+  font-size: 0.85em;
   margin-right: 10px;
+  background: #f7fafc;
+  padding: 2px 8px;
+  border-radius: 12px;
 }
 
 .delete-icon {
   cursor: pointer;
   color: #e53e3e;
-  margin-left: 10px;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.delete-icon:hover {
+  background-color: #fed7d7;
 }
 
 .main-content {
   flex-grow: 1;
+  min-width: 0;
 }
 
 .project-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.project-header h2 {
+  color: #2d3748;
 }
 
 .new-todo-btn {
   background-color: #6b46c1;
   color: white;
   border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
+  padding: 10px 20px;
+  border-radius: 6px;
   cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.new-todo-btn:hover {
+  background-color: #553c9a;
 }
 
 .tasks-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
 }
 
 .task-category {
-  flex: 1;
   background: #fff;
-  padding: 15px;
+  padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-height: 200px;
 }
 
 .to-do { border-left: 4px solid #ecc94b; }
 .in-progress { border-left: 4px solid #63b3ed; }
 .completed { border-left: 4px solid #48bb78; }
 
-h2, h3 {
+.task-category h3 {
   color: #2d3748;
+  margin-bottom: 15px;
+  font-size: 1.1em;
 }
 
 .tasks-list {
@@ -126,23 +193,59 @@ h2, h3 {
 .task-item {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 10px;
+  align-items: flex-start;
+  padding: 12px;
   margin-bottom: 10px;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid transparent;
+}
+
+.task-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .task-content {
   flex-grow: 1;
+  min-width: 0;
 }
 
-.task-item.low { background: #edf2f7; }
-.task-item.medium { background: #e2e8f0; }
-.task-item.high { background: #fed7d7; }
+.task-item.low { 
+  background: #edf2f7;
+  border-color: #cbd5e0;
+}
 
-.task-title { font-weight: 600; }
-.task-due, .task-desc, .task-status { font-size: 0.9em; color: #666; }
+.task-item.medium { 
+  background: #e2e8f0;
+  border-color: #a0aec0;
+}
+
+.task-item.high { 
+  background: #fed7d7;
+  border-color: #feb2b2;
+}
+
+.task-title { 
+  font-weight: 600;
+  margin-bottom: 4px;
+  word-wrap: break-word;
+}
+
+.task-due, .task-desc, .task-status { 
+  font-size: 0.85em;
+  color: #666;
+  margin-bottom: 2px;
+  word-wrap: break-word;
+}
+
+.task-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 
 /* Modal Styles */
 .modal {
@@ -155,27 +258,214 @@ h2, h3 {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
+  padding: 20px;
 }
 
 .todo-form {
   background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: #2d3748;
+}
+
+.form-group input, 
+.form-group textarea, 
+.form-group select {
+  padding: 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus, 
+.form-group textarea:focus, 
+.form-group select:focus {
+  outline: none;
+  border-color: #6b46c1;
+  box-shadow: 0 0 0 3px rgba(107, 70, 193, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.form-buttons button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.form-buttons button[type="submit"] {
+  background-color: #6b46c1;
+  color: white;
+}
+
+.form-buttons button[type="submit"]:hover {
+  background-color: #553c9a;
+}
+
+.form-buttons button[type="button"] {
+  background-color: #e2e8f0;
+  color: #4a5568;
+}
+
+.form-buttons button[type="button"]:hover {
+  background-color: #cbd5e0;
+}
+
+/* Project Modal */
+.project-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
   padding: 20px;
-  border-radius: 8px;
-  width: 400px;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 10px;
 }
 
-.todo-form label {
-  grid-column: 1;
+.project-form {
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.todo-form input, .todo-form textarea, .todo-form select {
-  grid-column: 2;
+/* Mobile Styles */
+@media (max-width: 768px) {
+  header {
+    padding: 12px 16px;
+  }
+  
+  nav {
+    gap: 8px;
+  }
+  
+  nav button {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+  
+  .dashboard-container {
+    flex-direction: column;
+    padding: 16px;
+    gap: 16px;
+  }
+  
+  .sidebar {
+    width: 100%;
+    position: static;
+    order: 2;
+  }
+  
+  .main-content {
+    order: 1;
+  }
+  
+  .project-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  
+  .new-todo-btn {
+    width: 100%;
+  }
+  
+  .tasks-container {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .task-category {
+    padding: 16px;
+  }
+  
+  .task-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  
+  .task-content {
+    order: 1;
+  }
+  
+  .delete-icon {
+    align-self: flex-end;
+    order: 2;
+  }
+  
+  .modal {
+    padding: 16px;
+  }
+  
+  .todo-form {
+    padding: 20px;
+    max-height: 85vh;
+  }
+  
+  .form-buttons {
+    flex-direction: column;
+  }
 }
 
-.todo-form button {
-  grid-column: span 2;
-  margin-top: 10px;
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: 12px;
+  }
+  
+  .task-category {
+    padding: 12px;
+  }
+  
+  .task-item {
+    padding: 10px;
+  }
+  
+  .todo-form, .project-form {
+    padding: 16px;
+  }
+  
+  .sidebar {
+    padding: 16px;
+  }
 }
