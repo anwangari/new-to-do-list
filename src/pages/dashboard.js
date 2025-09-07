@@ -3,6 +3,120 @@ import { parse, format, parseISO } from 'date-fns';
 
 let selectedProjectName = 'Default'; // Default selected project
 
+function createMobileProjectsPanel(app) {
+  // Create overlay
+  const overlay = createElement('div', { className: 'mobile-projects-overlay' });
+  
+  // Create panel
+  const panel = createElement('div', { className: 'mobile-projects-panel' });
+  
+  // Panel header
+  const header = createElement('div', { className: 'mobile-projects-header' });
+  const title = createElement('h3', { textContent: 'Projects' });
+  const closeBtn = createElement('button', { 
+    className: 'mobile-projects-close',
+    textContent: '×',
+    type: 'button'
+  });
+  appendChildren(header, [title, closeBtn]);
+  
+  // Panel content
+  const content = createElement('div', { className: 'mobile-projects-content' });
+  const projectsList = createElement('ul', { className: 'projects-list' });
+  
+  app.getAllProjects().forEach(project => {
+    const projectItem = createElement('li', { className: 'project-item' });
+    const projectLink = createElement('a', { 
+      textContent: project.name, 
+      className: 'project-link'
+    });
+    
+    // Add active state for selected project
+    if (project.name === selectedProjectName) {
+      projectItem.style.backgroundColor = '#f0f4f8';
+      projectLink.style.fontWeight = '600';
+    }
+    
+    const taskCount = createElement('span', { 
+      textContent: `${project.getAllToDos().length}`, 
+      className: 'task-count' 
+    });
+    
+    const deleteIcon = createElement('span', { 
+      textContent: '🗑️', 
+      className: 'delete-icon' 
+    });
+
+    projectLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      selectedProjectName = project.name;
+      // Close panel and re-render
+      closeMobilePanel();
+      renderDashboard(app);
+    });
+
+    deleteIcon.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (project.name === 'Default') {
+        alert('Cannot delete the default project');
+        return;
+      }
+      
+      if (confirm(`Delete project "${project.name}" and all its tasks?`)) {
+        const success = app.deleteProject(project.name);
+        if (success) {
+          if (selectedProjectName === project.name) {
+            selectedProjectName = 'Default';
+          }
+          closeMobilePanel();
+          renderDashboard(app);
+        } else {
+          alert('Failed to delete project');
+        }
+      }
+    });
+
+    appendChildren(projectItem, [projectLink, taskCount]);
+    
+    // Only show delete icon for non-default projects
+    if (project.name !== 'Default') {
+      projectItem.appendChild(deleteIcon);
+    }
+    
+    projectsList.appendChild(projectItem);
+  });
+  
+  content.appendChild(projectsList);
+  appendChildren(panel, [header, content]);
+  
+  function closeMobilePanel() {
+    panel.classList.remove('active');
+    overlay.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+  
+  // Event listeners
+  closeBtn.addEventListener('click', closeMobilePanel);
+  overlay.addEventListener('click', closeMobilePanel);
+  
+  // Prevent panel clicks from closing
+  panel.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+  
+  document.body.appendChild(overlay);
+  document.body.appendChild(panel);
+  
+  return {
+    show: () => {
+      overlay.style.display = 'block';
+      panel.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    },
+    hide: closeMobilePanel
+  };
+}
+
 function showTodoModal(app, mode = 'create', todo = null) {
   const modal = createElement('div', { className: 'modal' });
   const form = createElement('form', { className: 'todo-form' });
@@ -218,7 +332,23 @@ export function renderDashboard(app) {
   const sidebar = createElement('aside', { className: 'sidebar' });
   const main = createElement('main', { className: 'main-content' });
 
-  // Sidebar: Projects
+  // Mobile Projects Toggle Button - Create FIRST
+  const mobileToggle = createElement('button', { 
+    className: 'mobile-projects-toggle',
+    type: 'button'
+  });
+  const toggleText = createElement('span', { textContent: 'Projects' });
+  const toggleArrow = createElement('span', { textContent: '▼', className: 'arrow' });
+  appendChildren(mobileToggle, [toggleText, toggleArrow]);
+  
+  // Create mobile panel
+  const mobilePanel = createMobileProjectsPanel(app);
+  
+  mobileToggle.addEventListener('click', () => {
+    mobilePanel.show();
+  });
+
+  // Sidebar: Projects (Desktop only)
   const projectsHeader = createElement('h2', { textContent: 'Projects' });
   const projectsList = createElement('ul', { className: 'projects-list' });
   
@@ -287,6 +417,9 @@ export function renderDashboard(app) {
   // Main: Project Tasks
   const selectedProject = app.getProject(selectedProjectName) || app.getDefaultProject();
   selectedProjectName = selectedProject.name; // Ensure valid
+
+  // Add mobile toggle to main content FIRST
+  main.appendChild(mobileToggle);
 
   const projectHeader = createElement('div', { className: 'project-header' });
   const projectTitle = createElement('h2', { textContent: `${selectedProject.name}` });
