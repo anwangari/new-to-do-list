@@ -23,9 +23,22 @@ header {
   z-index: 100;
 }
 
+#logo {
+  height: 50px; /* Example height, adjust as needed */
+  width: auto;  /* Maintains aspect ratio */
+  margin-right: 20px; /* Adds some space between logo and navigation */
+  float: left; /* Or adjust layout with Flexbox/Grid on the header/nav */
+}
+
 nav {
   display: flex;
   gap: 10px;
+}
+
+nav img {
+  height: 50px;
+  width: auto;
+  margin-right: 20px;
 }
 
 nav button {
