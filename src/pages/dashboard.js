@@ -163,9 +163,21 @@ export function renderDashboard(app) {
 
   // Event Listeners for nav
   document.getElementById('dash').addEventListener('click', () => renderDashboard(app));
-  document.getElementById('new-project').addEventListener('click', () => {
-    const name = prompt('Enter project name:');
-    if (name) app.createProject(name);
-    renderDashboard(app);
+  document.querySelector('#new-project').addEventListener('click', () => {
+    let name = prompt('Enter project name:');
+    if (name) {
+      // Trim and validate the name to prevent empty or whitespace-only inputs
+      name = name.trim();
+      if (name && !app.getAllProjects().some(project => project.name === name)) {
+        try {
+          app.createProject(name);
+          renderDashboard(app);
+        } catch (error) {
+          alert(`Failed to create project: ${error.message}`);
+        }
+      } else {
+        alert('Project name already exists or is invalid.');
+      }
+    }
   });
 }
