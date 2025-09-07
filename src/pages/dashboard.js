@@ -289,7 +289,7 @@ export function renderDashboard(app) {
   selectedProjectName = selectedProject.name; // Ensure valid
 
   const projectHeader = createElement('div', { className: 'project-header' });
-  const projectTitle = createElement('h2', { textContent: `${selectedProject.name} Tasks` });
+  const projectTitle = createElement('h2', { textContent: `${selectedProject.name}` });
   const newTodoBtn = createElement('button', { 
     textContent: '+ New Task', 
     className: 'new-todo-btn' 
