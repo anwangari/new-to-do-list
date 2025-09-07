@@ -1,6 +1,7 @@
 import './styles.css';
 import ToDoListApp from './app/todo-app.js';
 import { renderDashboard } from './pages/dashboard.js';
+import { parse } from 'date-fns';
 
 // Initial Data
 const app = new ToDoListApp();
@@ -14,8 +15,6 @@ if (app.getAllProjects().length === 1 && app.getDefaultProject().getAllToDos().l
   app.addToDoToProject('Review Content Strategy', 'Review marketing strategy', parse('11/10/2025', 'MM/dd/yyyy', new Date()), 'medium', 'Project A', 'To-Do');
   app.createProject('Project B');
   app.createProject('Project C');
-  app.createProject('Project D');
-  app.createProject('Project E');
 }
 
 document.addEventListener('DOMContentLoaded', () => renderDashboard(app));
